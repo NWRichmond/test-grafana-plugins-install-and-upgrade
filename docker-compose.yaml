@@ -1,0 +1,30 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    ports:
+      - "9097:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: >
+      --enable-feature=remote-write-receiver
+      --enable-feature=exemplar-storage
+      --enable-feature=native-histograms
+      --config.file=/etc/prometheus/prometheus.yml
+      --storage.tsdb.path=/prometheus
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:12.2.0
+    container_name: grafana-12-2-0
+    ports:
+      - "3050:3000"
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+    user: root
+    environment:
+      GF_LOG_LEVEL: debug
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_PLUGINS_PREINSTALL_DISABLED: true

@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: gdev-prometheus
+    uid: gdev-prometheus
+    type: prometheus
+    access: proxy
+    url: http://host.docker.internal:9097
+    basicAuth: true # username: admin, password: admin
+    basicAuthUser: admin
+    jsonData:
+      alertmanagerUid: gdev-alertmanager
+      prometheusType: Prometheus # Cortex | Mimir | Prometheus | Thanos
+      prometheusVersion: 3.2.1
+    secureJsonData:
+      basicAuthPassword: admin # https://grafana.com/docs/grafana/latest/administration/provisioning/#using-environment-variables
